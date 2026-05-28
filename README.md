@@ -78,6 +78,10 @@ The Ride List API is optimized for large tables:
 - **`Prefetch` with filtered queryset** — Only loads RideEvents from the last 24 hours into `todays_ride_events`, instead of loading all events and filtering in Python.
 - **Total queries: 3** — 1 for the ride list (with JOINs), 1 for the prefetched RideEvents, 1 for the pagination COUNT.
 
+### Trip Report
+- `GET /api/reports/trips-over-1hr/` — JSON report of trips > 1hr grouped by month and driver (raw SQL)
+- `python manage.py trip_report` — Same report printed to the terminal
+
 ## SQL Bonus: Trips Longer Than 1 Hour
 
 ```sql
