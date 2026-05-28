@@ -32,7 +32,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING('No trips over 1 hour found.'))
             return
 
-        self.stdout.write(f"{'Month':<12} {'Driver':<12} {'Count':<6}")
-        self.stdout.write('-' * 30)
+        self.stdout.write(f"{'Month':<12}{'Driver':<12}{'Count of Trips > 1 hr'}")
         for row in rows:
-            self.stdout.write(f"{row[0]:<12} {row[1]:<12} {row[2]:<6}")
+            self.stdout.write(f"{row[0]:<12}{row[1]:<12}{row[2]}")
