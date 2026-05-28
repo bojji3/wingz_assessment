@@ -120,6 +120,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+LOGIN_URL = '/api-auth/login/'
+LOGIN_REDIRECT_URL = '/api/'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
