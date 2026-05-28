@@ -10,3 +10,6 @@ dist/
 build/
 .DS_Store
 Thumbs.db
+desktop.ini
+*.pdf
+test_distance.py
