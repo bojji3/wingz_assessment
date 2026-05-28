@@ -83,7 +83,7 @@ The Ride List API is optimized for large tables:
 ```sql
 SELECT
     strftime('%Y-%m', re_pickup.created_at) AS month,
-    d.first_name || ' ' || substr(d.last_name, 1, 1) || '.' AS driver,
+    d.first_name || ' ' || substr(d.last_name, 1, 1) AS driver,
     COUNT(*) AS count_of_trips_over_1hr
 FROM rides_ride r
 INNER JOIN rides_ride_event re_pickup
