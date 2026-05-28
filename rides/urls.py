@@ -10,4 +10,5 @@ router.register(r'ride-events', views.RideEventViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('reports/trips-over-1hr/', views.trip_report, name='trip-report'),
 ]

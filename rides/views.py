@@ -1,10 +1,11 @@
 from datetime import timedelta
 
-from django.db import models
+from django.db import connection, models
 from django.db.models import F, Func, Value
 from django.db.models.functions import Radians
 from django.utils import timezone
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -120,3 +121,33 @@ class RideViewSet(viewsets.ModelViewSet):
         if rider_email:
             queryset = queryset.filter(id_rider__email=rider_email)
         return queryset
+
+
+TRIP_REPORT_SQL = """
+    SELECT
+        strftime('%%Y-%%m', re_pickup.created_at) AS month,
+        d.first_name || ' ' || substr(d.last_name, 1, 1) AS driver,
+        COUNT(*) AS count_of_trips_over_1hr
+    FROM rides_ride r
+    INNER JOIN rides_ride_event re_pickup
+        ON r.id_ride = re_pickup.id_ride
+        AND re_pickup.description = 'Status changed to pickup'
+    INNER JOIN rides_ride_event re_dropoff
+        ON r.id_ride = re_dropoff.id_ride
+        AND re_dropoff.description = 'Status changed to dropoff'
+    INNER JOIN rides_user d
+        ON r.id_driver = d.id_user
+    WHERE (julianday(re_dropoff.created_at) - julianday(re_pickup.created_at)) * 24 > 1
+    GROUP BY month, d.id_user, d.first_name, d.last_name
+    ORDER BY month, driver
+"""
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminRole])
+def trip_report(request):
+    with connection.cursor() as cursor:
+        cursor.execute(TRIP_REPORT_SQL)
+        columns = [col[0] for col in cursor.description]
+        rows = cursor.fetchall()
+    return Response([dict(zip(columns, row)) for row in rows])
