@@ -125,7 +125,7 @@ class RideViewSet(viewsets.ModelViewSet):
 
 TRIP_REPORT_SQL = """
     SELECT
-        strftime('%%Y-%%m', re_pickup.created_at) AS month,
+        strftime('%Y-%m', re_pickup.created_at) AS month,
         d.first_name || ' ' || substr(d.last_name, 1, 1) AS driver,
         COUNT(*) AS count_of_trips_over_1hr
     FROM rides_ride r
